@@ -51,6 +51,9 @@ if uploaded_file is not None:
     st.subheader("🔍 Prediction Result")
     st.write(f"**Class:** {predicted_class}")
     st.write(f"**Confidence:** {confidence:.2f}")
+    # 🎉 Show balloons if no tumor
+    if predicted_class.lower() == "no_tumor":
+        st.balloons()
 
     # Visualization (Bar Chart)
     st.subheader("📊 Confidence per Class")
@@ -59,4 +62,5 @@ if uploaded_file is not None:
     ax.set_ylabel("Probability")
     ax.set_ylim([0, 1])
     st.pyplot(fig)
+
 
