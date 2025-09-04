@@ -39,20 +39,13 @@ if uploaded_file is not None:
     img_array = np.array(img_array, dtype=np.float32)
     img_array = np.expand_dims(img_array, axis=0)  # Shape: [1, 224, 224, 3]
 
-    # 🔹 Try with normalization (even if model has Rescaling layer, just to debug)
-    # img_array = img_array / 255.0  
-
-    st.write("Image shape:", img_array.shape, "Min:", img_array.min(), "Max:", img_array.max())
-
     # Make prediction
     predictions = model.predict(img_array)
     confidence = float(np.max(predictions))
     predicted_index = int(np.argmax(predictions))
     predicted_class = CLASS_NAMES[str(predicted_index)]
 
-    # Debug print
-    st.subheader("🛠 Debug Info")
-    st.write("Raw predictions:", predictions.tolist())
+
 
     # Show prediction result
     st.subheader("🔍 Prediction Result")
@@ -66,3 +59,4 @@ if uploaded_file is not None:
     ax.set_ylabel("Probability")
     ax.set_ylim([0, 1])
     st.pyplot(fig)
+
