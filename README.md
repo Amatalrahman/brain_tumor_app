@@ -85,8 +85,9 @@ streamlit run app.py
 ## All preprocessing, training, and evaluation steps are documented in our notebooks:
 - [ EDA & preprocessing approach1 ](https://www.kaggle.com/code/amatalrahmanhasanin/braintumer-classification)
 - [preprocessing appraoch 2](https://www.kaggle.com/code/ayamohamednagy12/braintumer-classification)
-- [_mobilenetv2 model]()
 - [effecient net model]()
+- [_mobilenetv2 model](https://www.kaggle.com/code/ayamohamednagy12/braintumer-classification-finalv/edit/run/260109368)
+
 
 
 # License & Collaboration
