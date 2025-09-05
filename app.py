@@ -1,66 +1,66 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-from PIL import Image
-import matplotlib.pyplot as plt
 import json
+from PIL import Image
 
-# ---------------- Load Model ----------------
+# ----------------------------
+# Load model & class names
+# ----------------------------
 @st.cache_resource
 def load_model():
-    model = tf.keras.models.load_model(
-        "brisc_mobilenetv2_finetuned.keras"
-    )  # Path to trained model
-    return model
+    return tf.keras.models.load_model("brain_tumor_mobilenetv2.h5")
+
+@st.cache_resource
+def load_class_names():
+    with open("class_names.json", "r") as f:
+        class_names = json.load(f)
+
+    # Handle both list and dict formats
+    if isinstance(class_names, dict):
+        class_names = {int(k): v for k, v in class_names.items()}
+    elif isinstance(class_names, list):
+        class_names = {i: name for i, name in enumerate(class_names)}
+
+    return class_names
 
 model = load_model()
+class_names = load_class_names()
 
-# ---------------- Load Class Names ----------------
-with open("class_names.json", "r") as f:
-    CLASS_NAMES = json.load(f)
-
-IMG_SIZE = (224, 224)
-
+# ----------------------------
+# Streamlit UI
+# ----------------------------
 st.set_page_config(page_title="Brain Tumor Classification", layout="centered")
+st.title("🧠 Brain Tumor Classification (MobileNetV2)")
+st.write("Upload a brain MRI/CT image and the model will classify the tumor type.")
 
-# ---------------- UI ----------------
-st.title("🧠 Brain Tumor Classification")
-st.write("Upload an MRI image and let the model classify it into one of the four categories.")
-
-uploaded_file = st.file_uploader("Upload MRI Image", type=["jpg", "jpeg", "png"])
+# File uploader
+uploaded_file = st.file_uploader("📂 Upload a brain MRI/CT image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    # Display uploaded image
+    # Show uploaded image
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded MRI", use_container_width=True)
+    st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    # Preprocess the image
-    img_array = image.resize(IMG_SIZE)
-    img_array = np.array(img_array, dtype=np.float32)
-    img_array = np.expand_dims(img_array, axis=0)  # Shape: [1, 224, 224, 3]
+    # Preprocess image
+    img_resized = image.resize((224, 224))
+    img_array = np.array(img_resized) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
 
-    # Make prediction
-    predictions = model.predict(img_array)
-    confidence = float(np.max(predictions))
-    predicted_index = int(np.argmax(predictions))
-    predicted_class = CLASS_NAMES[str(predicted_index)]
+    # Prediction
+    preds = model.predict(img_array)
+    pred_class = np.argmax(preds, axis=1)[0]
+    confidence = float(np.max(preds))
 
-
-
-    # Show prediction result
-    st.subheader("🔍 Prediction Result")
-    st.write(f"**Class:** {predicted_class}")
+    # Show result
+    st.subheader("🔎 Prediction Result")
+    st.write(f"**Class:** {class_names[pred_class]}")
     st.write(f"**Confidence:** {confidence:.2f}")
-    # 🎉 Show balloons if no tumor
-    if predicted_class.lower() == "no_tumor":
-        st.balloons()
 
-    # Visualization (Bar Chart)
-    st.subheader("📊 Confidence per Class")
-    fig, ax = plt.subplots()
-    ax.bar(CLASS_NAMES.values(), predictions[0], color="skyblue")
-    ax.set_ylabel("Probability")
-    ax.set_ylim([0, 1])
-    st.pyplot(fig)
+    # Confidence progress bar
+    st.progress(confidence)
 
-
+    # Show all class probabilities
+    st.subheader("📊 Class Probabilities")
+    prob_dict = {class_names[i]: float(preds[0][i]) for i in range(len(class_names))}
+    st.json(prob_dict)
