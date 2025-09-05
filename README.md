@@ -20,7 +20,17 @@ This repository contains a Deep Learning project for classifying brain MRI image
 - Resized all images to a uniform size (224x224).
 - Normalized pixel values.
 - Split data into **training, validation, and test sets**.
-- Created a separate unseen dataset to simulate real-world evaluation.
+- #### Data Augmentation
+  To handle class imbalance, we applied data augmentation on underrepresented classes.
+   Techniques included:
+   - rotation
+   - horizontal/vertical flips
+   - zoom
+   - width/height shifts
+   -  and adding small random noise.
+   This increases dataset diversity and helps the model generalize better.
+
+- Use a separate unseen dataset to simulate real-world evaluation.
 
 ### 3. Model Training
 - Built and trained a mobilenetv2_based model for classification.
@@ -46,10 +56,12 @@ This repository contains a Deep Learning project for classifying brain MRI image
 ---
 
 ## Demo
-Try the app online:  
-[Streamlit app link](https://youtu.be/-VeBsKOCrdc)
+https://github.com/user-attachments/assets/3e2ec3b1-a84f-4347-9433-125dc128e600
+# Try the app online:  
+![Image](https://github.com/user-attachments/assets/f54d4188-a232-43d9-aef6-5fe3b4503edf)
 
-[![whatch](https://img.youtube.com/vi/-VeBsKOCrdc/0.jpg)](https://youtu.be/-VeBsKOCrdc)
+[Streamlit app link](https://braintumorapp-be6tkpqu4odjcwnfcksrj5.streamlit.app/)
+
 
 Or run locally:
 
@@ -59,16 +71,27 @@ cd <repository-folder>
 pip install -r requirements.txt
 streamlit run app.py
 ```
+##
+<img width="320" height="320" alt="Image" src="https://github.com/user-attachments/assets/2ba6c3b5-3ad2-40a0-883a-dfbc9653837a" />
+
 ## Dataset Sources
 
 - Training & Validation dataset: [Kaggle](https://www.kaggle.com/datasets/briscdataset/brisc2025)
 
 - Unseen Testing dataset: [Kaggle](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
 ## Note books
-- All preprocessing, training, and evaluation steps are documented in our notebooks:
+<img width="690" height="362" alt="Image" src="https://github.com/user-attachments/assets/88aee290-92d8-4780-940f-a54673469b7a" />
+
+## All preprocessing, training, and evaluation steps are documented in our notebooks:
 - [ EDA & preprocessing approach1 ](https://www.kaggle.com/code/amatalrahmanhasanin/braintumer-classification)
 - [preprocessing appraoch 2](https://www.kaggle.com/code/ayamohamednagy12/braintumer-classification)
 - [_mobilenetv2 model]()
 - [effecient net model]()
+
+
+# License & Collaboration
+
+This project is licensed under MIT License.
+Contributions and collaboration are welcome! Open an issue or pull request if you want to join.
 
 
